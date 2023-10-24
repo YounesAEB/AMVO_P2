@@ -20,7 +20,7 @@ function plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,N)
     plot(angle,cp);
     xlim([0,360]);
     title('$c_p$ angle distribution')
-    xlabel('$\alpha$ ($^o$)')
+    xlabel('$\theta$ ($^o$)')
     ylabel('$c_p$')
     grid on
     grid minor

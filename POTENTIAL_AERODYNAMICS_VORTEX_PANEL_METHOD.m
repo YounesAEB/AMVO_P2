@@ -7,10 +7,10 @@
 clc; clear; close all;
 
 % Input parameters
-N       = 50;  % Number of panels
+N       = 128;  % Number of panels
 R       = 1;    % Radius of the cilinder
-AoA     = 6;    % Angle of attack
-Uinf    = 30;   % Freestream Velocity field module
+AoA     = 0;    % Angle of attack
+Uinf    = 1;   % Freestream Velocity field module
 Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 
 % Precomputations
@@ -19,18 +19,17 @@ Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 [cj,sj,Ncj,Tcj] = computePanelAngleAndNormalAndTangentVectors(coord_xP,lp,N); % Panel angle, normal and tangent vectors calculation
 
 % POTENTIAL AERODYNAMICS - VELOCITY AND PRESSURE FIELDS CALCULATION
-%[gamma,uInd,wInd] = computeConstantSourceDistribution(Qinf,coord_xP,coord_xC,lp,cj,sj,Ncj,N);
-[gamma,uInd,wInd] = computeConstantVortexDistribution(Qinf,coord_xP,coord_xC,lp,cj,sj,Tcj,N);
+[gamma,uInd,wInd] = computeConstantSourceDistribution(Qinf,coord_xP,coord_xC,lp,cj,sj,Ncj,N);
+%[gamma,uInd,wInd] = computeConstantVortexDistribution(Qinf,coord_xP,coord_xC,lp,cj,sj,Tcj,N);
 
 % Preprocessing computations
 V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
 cp  = computeCp(Qinf,V);
 
-
 % POSTPROCESSING
 plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
-plotVelocityDistribution(Qinf,V,N);
 plotSourceStrengthDistribution(coord_xC,coord_xP,Ncj,gamma,N);
+plotVelocityDistribution(Qinf,V,N);
 plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,N);
 
 
