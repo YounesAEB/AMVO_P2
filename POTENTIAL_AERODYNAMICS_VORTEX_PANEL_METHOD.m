@@ -10,6 +10,7 @@ clc; clear; close all;
 % Input parameters
 N       = 200;  % Number of panels
 R       = 1;    % Radius of the cilinder
+c       = 2*R;  % Equivalent chord
 AoA     = 6;    % Angle of attack
 Uinf    = 1;   % Freestream Velocity field module
 Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
@@ -26,7 +27,7 @@ Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 % Preprocessing computations
 V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
 cp  = computeCp(Qinf,V);
-
+cm4 = computeCm4(cp,coord_xC,coord_xP,c);
 % POSTPROCESSING
 plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
 plotSourceStrengthDistribution(coord_xC,coord_xP,Ncj,gamma,N);
