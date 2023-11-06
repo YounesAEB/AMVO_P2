@@ -17,11 +17,14 @@ for i = 1:N
     b(i) = -Ncj(i,:)*Qinf;
     for j = 1:N
         if i == j
-            A(i,i) = 0.5;
             uIndLoc(i,i) = 0;
             wIndLoc(i,i) = 0.5;
+
+            % Change of the velocity components to the global frame
             uInd(i,i) = uIndLoc(i,j)*cj(j) + wIndLoc(i,j)*sj(j);
             wInd(i,i) = -uIndLoc(i,j)*sj(j) + wIndLoc(i,j)*cj(j);
+            
+            A(i,i) = 0.5;
         else
             xLoc(i,j) = (coord_xC(i,1)-coord_xP(j,1))*cj(j)...
                       - (coord_xC(i,2)-coord_xP(j,2))*sj(j);
