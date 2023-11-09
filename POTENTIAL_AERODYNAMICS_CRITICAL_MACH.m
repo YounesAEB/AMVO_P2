@@ -35,6 +35,7 @@ V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
 cp  = computeCp(Qinf,V);
 cpCorrected = cp./(sqrt(1-M(1,i)^2)+(cp.*M(1,i)^2)/(2*sqrt(1-M(1,i)^2))*(1+M(1,i)^2*(isentropicExp-1)/2));
 cl = computeCl(cpCorrected,lp,Ncj,c,AoA);
+clCorrected(i) = cl;
 
 % POSTPROCESSING
 % plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
@@ -42,7 +43,6 @@ cl = computeCl(cpCorrected,lp,Ncj,c,AoA);
 % plotVelocityDistribution(Qinf,V,N);
 % plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,N)
 
-clCorrected(i) = cl;
 end
 
 figure

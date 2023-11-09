@@ -1,5 +1,7 @@
-function [coord_xC,lp] = setGeometricParameters(coord_xP,N)
-    
+function [coord_xP,coord_xC,lp] = setGeometricParameters(c,N,NACA)
+
+    coord_xP = readmatrix("NACA_" + NACA + "_N_" + string(N) + "_coord.txt");
+    coord_xP = c*coord_xP(:,2:3);
     coord_xC = zeros(N,2);  % Panel center nodes
     lp = zeros(N,1);        % Panel length definition
 
