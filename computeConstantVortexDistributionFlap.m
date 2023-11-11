@@ -49,17 +49,17 @@ function [gamma,uInd,wInd] = computeConstantVortexDistributionFlap(Qinf,coord_xP
             end        
         end
         for j = N+1:N+M
-                xLoc(i,j) = (coord_xC(i,1)-coord_xP(j,1))*cj(j)...
-                          - (coord_xC(i,2)-coord_xP(j,2))*sj(j);
+                xLoc(i,j) = (coord_xC(i,1)-coord_xP(j+1,1))*cj(j)...
+                          - (coord_xC(i,2)-coord_xP(j+1,2))*sj(j);
     
-                zLoc(i,j) = (coord_xC(i,1)-coord_xP(j,1))*sj(j)...
-                          + (coord_xC(i,2)-coord_xP(j,2))*cj(j);
+                zLoc(i,j) = (coord_xC(i,1)-coord_xP(j+1,1))*sj(j)...
+                          + (coord_xC(i,2)-coord_xP(j+1,2))*cj(j);
                 
-                r1 = sqrt((coord_xP(j,1)-coord_xC(i,1))^2 + ...
-                           (coord_xP(j,2)-coord_xC(i,2))^2);
+                r1 = sqrt((coord_xP(j+1,1)-coord_xC(i,1))^2 + ...
+                           (coord_xP(j+1,2)-coord_xC(i,2))^2);
     
-                r2 = sqrt((coord_xP(j+1,1)-coord_xC(i,1))^2 + ...
-                           (coord_xP(j+1,2)-coord_xC(i,2))^2); 
+                r2 = sqrt((coord_xP(j+2,1)-coord_xC(i,1))^2 + ...
+                           (coord_xP(j+2,2)-coord_xC(i,2))^2); 
     
                 theta1 = atan2(zLoc(i,j),xLoc(i,j));
     
@@ -109,20 +109,20 @@ function [gamma,uInd,wInd] = computeConstantVortexDistributionFlap(Qinf,coord_xP
                 A(i,i) = -0.5;
                 uIndLoc(i,i) = 0.5;
                 wIndLoc(i,i) = 0;
-                uInd(i,i) = uIndLoc(i,j)*cj(j) + wIndLoc(i,j)*sj(j);
-                wInd(i,i) = -uIndLoc(i,j)*sj(j) + wIndLoc(i,j)*cj(j);
+                uInd(i,i) = uIndLoc(i,i)*cj(i) + wIndLoc(i,i)*sj(i);
+                wInd(i,i) = -uIndLoc(i,i)*sj(i) + wIndLoc(i,i)*cj(i);
             else
-                xLoc(i,j) = (coord_xC(i,1)-coord_xP(j,1))*cj(j)...
-                          - (coord_xC(i,2)-coord_xP(j,2))*sj(j);
+                xLoc(i,j) = (coord_xC(i,1)-coord_xP(j+1,1))*cj(j)...
+                          - (coord_xC(i,2)-coord_xP(j+1,2))*sj(j);
     
-                zLoc(i,j) = (coord_xC(i,1)-coord_xP(j,1))*sj(j)...
-                          + (coord_xC(i,2)-coord_xP(j,2))*cj(j);
+                zLoc(i,j) = (coord_xC(i,1)-coord_xP(j+1,1))*sj(j)...
+                          + (coord_xC(i,2)-coord_xP(j+1,2))*cj(j);
                 
-                r1 = sqrt((coord_xP(j,1)-coord_xC(i,1))^2 + ...
-                           (coord_xP(j,2)-coord_xC(i,2))^2);
+                r1 = sqrt((coord_xP(j+1,1)-coord_xC(i,1))^2 + ...
+                           (coord_xP(j+1,2)-coord_xC(i,2))^2);
     
-                r2 = sqrt((coord_xP(j+1,1)-coord_xC(i,1))^2 + ...
-                           (coord_xP(j+1,2)-coord_xC(i,2))^2); 
+                r2 = sqrt((coord_xP(j+2,1)-coord_xC(i,1))^2 + ...
+                           (coord_xP(j+2,2)-coord_xC(i,2))^2); 
     
                 theta1 = atan2(zLoc(i,j),xLoc(i,j));
     
@@ -144,13 +144,13 @@ function [gamma,uInd,wInd] = computeConstantVortexDistributionFlap(Qinf,coord_xP
     pos1 = round(N/4,0);
     A(pos1,:)   = 0;
     A(pos1,1)   = 1;
-    A(pos1,end) = 1;
+    A(pos1,N) = 1;
     b(pos1)     = 0;
 
     pos2 = N + round(M/4,0);
     A(pos2,:)   = 0;
-    A(pos2,1)   = 1;
-    A(pos2,end) = 1;
+    A(pos2,N+1)   = 1;
+    A(pos2,N+M) = 1;
     b(pos2)     = 0;
     
     % Sorce strenghts obtention 
