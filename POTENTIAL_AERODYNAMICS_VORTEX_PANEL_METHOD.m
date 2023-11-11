@@ -8,16 +8,17 @@ clc; clear; close all;
 
 %% EXERCISE I
 % Input parameters
-N       = 200;  % Number of panels
-R       = 1;    % Radius of the cilinder
-c       = 2*R;  % Equivalent chord
-AoA     = 6;    % Angle of attack
+N       = 512;  % Number of panels
+NACA    = "0010";
+% R       = 1;    % Radius of the cilinder
+c       = 1;  % Airfoil chord
+AoA     = 6;  % Angle of attack
 Uinf    = 1;   % Freestream Velocity field module
 Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 
 % Precomputations
-[coord_xP]      = setCylinderNodes(R,N); % Normally the coordinates xP are given
-[coord_xC,lp]   = setGeometricParameters(coord_xP,N);
+% [coord_xP]      = setCylinderNodes(R,N); % Normally the coordinates xP are given
+[coord_xP,coord_xC,lp] = setGeometricParameters(c,N,NACA);
 [cj,sj,Ncj,Tcj] = computePanelAngleAndNormalAndTangentVectors(coord_xP,lp,N); % Panel angle, normal and tangent vectors calculation
 
 % POTENTIAL AERODYNAMICS - VELOCITY AND PRESSURE FIELDS CALCULATION
@@ -29,10 +30,10 @@ V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
 cp  = computeCp(Qinf,V);
 cm4 = computeCm4(cp,coord_xC,coord_xP,c);
 % POSTPROCESSING
-plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
-plotSourceStrengthDistribution(coord_xC,coord_xP,Ncj,gamma,N);
-plotVelocityDistribution(Qinf,V,N);
-plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,N)
+% plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
+% plotSourceStrengthDistribution(coord_xC,coord_xP,Ncj,gamma,N);
+% plotVelocityDistribution(Qinf,V,N);
+% plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,N)
 
 %% EXERCISE II
 isentropicExp = 1.4;
