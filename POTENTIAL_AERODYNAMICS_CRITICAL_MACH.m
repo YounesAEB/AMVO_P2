@@ -46,4 +46,13 @@ clCorrected(i) = cl;
 end
 
 figure
-plot(M,clCorrected);
+hold on
+plot(M,clCorrected,'b');
+scatter(M,clCorrected,"square","filled","r");
+xlabel("Freestream Mach number $M_{\infty}$");
+ylabel("Lift Coefficient $C_{l}$");
+grid on;
+grid minor;
+box on;
+axis padded
+hold off;
