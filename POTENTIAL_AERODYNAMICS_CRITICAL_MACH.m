@@ -4,26 +4,38 @@
 %  /  ESEIAAT_UPC                                           
 %  /  MUEA - MQ1 - Younes Akhazzan - Joel Rajo - Pol Ruiz                         
 %--------------------------------------------------------------------------
-clc; clear; %close all;
+clc; clear; close all;
+set(groot,'defaultAxesTickLabelInterpreter','latex');  
+set(groot,'defaulttextinterpreter','latex');
+set(groot,'defaultLegendInterpreter','latex');
 
 % Input parameters
-N             = 200;  % Number of panels
-R             = 1;    % Radius of the cilinder
-c             = 2*R;  % Equivalent chord
-AoA           = 6;    % Angle of attack
+N             = 512;  % Number of panels
+NACA          = "0010";
+% R             = 1;    % Radius of the cilinder
+c             = 1;  % Equivalent chord
+AoA           = 2;    % Angle of attack
 isentropicExp = 1.4; % Gamma ideal gas
-Mcrit         = 0.336947168481477;
+Mcrit         = 0.604052986849087;
 a             = 340;  % [m/s] Sound velocity
-M             = linspace(0.000001,Mcrit,25);
+M             = [Mcrit-0.15,Mcrit-0.1,Mcrit-0.05,Mcrit];
+
+% Vector definition
 clCorrected   = zeros(size(M,2),1);
+
 for i=1:size(M,2)
 Uinf    = M(1,i)*a;   % Freestream Velocity field module
 B       = sqrt(1-M(1,i)^2); %Prandlt-Glauert Correction Parameter
 Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 
-% Precomputations
-[coord_xP]      = setCylinderNodes(R,N); % Normally the coordinates xP are given
-[coord_xC,lp]   = setGeometricParameters(coord_xP,N);
+% PRECOMPUTATIONS
+
+% Cilinder
+% [coord_xP]      = setCylinderNodes(R,N); % Normally the coordinates xP are given
+% [coord_xC,lp]   = setGeometricParameters(coord_xP,N);
+
+% Airfoil
+[coord_xP,coord_xC,lp] = setGeometricParameters(c,N,NACA);
 [cj,sj,Ncj,Tcj] = computePanelAngleAndNormalAndTangentVectors(coord_xP,lp,N); % Panel angle, normal and tangent vectors calculation
 
 % POTENTIAL AERODYNAMICS - VELOCITY AND PRESSURE FIELDS CALCULATION
@@ -46,4 +58,13 @@ clCorrected(i) = cl;
 end
 
 figure
-plot(M,clCorrected);
+hold on
+plot(M,clCorrected,'b');
+scatter(M,clCorrected,"square","filled","r");
+xlabel("Freestream Mach number $M_{\infty}$");
+ylabel("Lift Coefficient $C_{l}$");
+grid on;
+grid minor;
+box on;
+axis padded
+hold off;
