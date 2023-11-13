@@ -25,6 +25,10 @@ MCR = zeros(size(Naux,2),size(AoAaux,2));
 for i=1:size(Naux,2)
 % R     = 1;    % Radius of the cilinder
 N = Naux(i);
+
+msg = sprintf('Calculation for %i panels...', N);
+    disp(msg);
+
 % Precomputations
 % [coord_xP]      = setCylinderNodes(R,N); % Normally the coordinates xP are given
 [coord_xP,coord_xC,lp] = setGeometricParameters(c,N,NACA);
@@ -32,7 +36,8 @@ N = Naux(i);
 
 % Vector definition
 CP = zeros(N,size(AoAaux,2));
-
+figure
+hold on
 for j=1:numel(AoAaux)
     AoA = AoAaux(j);
     Qinf = Uinf*[cosd(AoA);sind(AoA)];
@@ -62,21 +67,84 @@ for j=1:numel(AoAaux)
     msg = sprintf('Cl=%i and Cm1/4=%i for AoA=%i degrees', cl, cm4, AoA);
     disp(msg);
 
+plot(coord_xC(:,1),cp);
 end
+title("Pressure coefficient plot for " + string(N) + " panels - $C_p~vs~x/c$")
+xlabel("Chord length $x/c$ ");
+ylabel("Pressure Coefficient $C_{p}$");
+legend("$\alpha=2$","$\alpha=4$","$\alpha=6$","$\alpha=8$","$\alpha=10$","Location","southeast");
+grid on;
+grid minor;
+box on;
+axis padded
+fontsize(13,"points")
+hold off;
+
+
 % POSTPROCESSING
 % plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
 % plotSourceStrengthDistribution(coord_xC,coord_xP,Ncj,gamma,N);
 % plotVelocityDistribution(Qinf,V,N);
+% plotPressureCoefficient(coord_xP,coord_xC,Ncj,CP(:,a),N)
+end
 
-for a=1:size(AoAaux,2)
-plotPressureCoefficient(coord_xP,coord_xC,Ncj,CP(:,a),N)
+% MESH INDEPENDENCE TEST - PLOTS
+figure
 hold on
-end
+title("Panel density independence test - $C_l~vs~\alpha$")
+plot(AoAaux,CL(1,:));
+plot(AoAaux,CL(2,:));
+plot(AoAaux,CL(3,:));
+plot(AoAaux,CL(4,:));
+plot(AoAaux,CL(5,:));
+plot(AoAaux,CL(6,:));
+xlabel("Angle of attack $\alpha$ ($^\circ$)");
+ylabel("Lift Coefficient $C_{l}$");
+legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","northwest");
+grid on;
+grid minor;
+box on;
+axis padded
+fontsize(13,"points")
+hold off;
 
-end
+figure
+hold on
+title("Panel density independence test - ${C_m}_{1/4}~vs~\alpha$")
+plot(AoAaux,CM4(1,:));
+plot(AoAaux,CM4(2,:));
+plot(AoAaux,CM4(3,:));
+plot(AoAaux,CM4(4,:));
+plot(AoAaux,CM4(5,:));
+plot(AoAaux,CM4(6,:));
+xlabel("Angle of attack $\alpha$ ($^\circ$)");
+ylabel("Momentum Coefficient about the quarter ${C_{m}}_{1/4}$");
+legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","southwest");
+grid on;
+grid minor;
+box on;
+axis padded
+fontsize(13,"points")
+hold off;
 
-
-
+figure
+hold on
+title("Panel density independence test - $M_{crit}~vs~\alpha$")
+plot(AoAaux,MCR(1,:));
+plot(AoAaux,MCR(2,:));
+plot(AoAaux,MCR(3,:));
+plot(AoAaux,MCR(4,:));
+plot(AoAaux,MCR(5,:));
+plot(AoAaux,MCR(6,:));
+xlabel("Angle of attack $\alpha$ ($^\circ$)");
+ylabel("Critical Freestream Mach number $M_{crit}$");
+legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","southwest");
+grid on;
+grid minor;
+box on;
+axis padded
+fontsize(13,"points")
+hold off;
 
 
 
