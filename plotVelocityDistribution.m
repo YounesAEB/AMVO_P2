@@ -12,7 +12,7 @@ function plotVelocityDistribution(Qinf,V,N)
     hold off
     xlim([0,360]);
     xlabel('$\theta (^o)$')
-    ylabel('$V (m/s¿?)$')
+    ylabel('$V (m/s)$')
     legend('$V_x$','$V_z$',Location='southwest')
 
     grid on
