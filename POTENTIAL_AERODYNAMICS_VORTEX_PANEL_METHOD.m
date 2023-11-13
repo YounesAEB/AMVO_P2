@@ -5,6 +5,9 @@
 %  /  MUEA - MQ1 - Younes Akhazzan - Joel Rajo - Pol Ruiz                         
 %--------------------------------------------------------------------------
 clc; clear; close all;
+set(groot,'defaultAxesTickLabelInterpreter','latex');  
+set(groot,'defaulttextinterpreter','latex');
+set(groot,'defaultLegendInterpreter','latex');
 
 %% EXERCISE I
 % Input parameters
@@ -51,5 +54,8 @@ syms Minf2
 eqn_Cp = Cp_0/(sqrt(1-Minf2)+(Cp_0*Minf2)/(2*sqrt(1-Minf2))*(1+Minf2*(isentropicExp-1)/2)) == 2/(isentropicExp*Minf2)*(((2+(isentropicExp-1)*Minf2)/(1+isentropicExp))^(isentropicExp/(isentropicExp-1))-1);
 Mcrit2 = solve(eqn_Cp, Minf2);
 Mcrit = double(sqrt(Mcrit2(1)));
+
+
+
 
 
