@@ -19,7 +19,8 @@ AoA     = 0;  % Angle of attack main airfoil
 Uinf    = 1;   % Freestream Velocity field module
 Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 
-df_aux      = [4,8,12,16,20];  % Flap deflection
+% df_aux      = [4,8,12,16,20];  % Flap deflection
+df_aux      = [4];  % Flap deflection
 CM4 = zeros(size(df_aux,2),1);
 CL  = zeros(size(df_aux,2),1);
 CL1  = zeros(size(df_aux,2),1);
@@ -54,9 +55,10 @@ CL2(i,1) = cl2;
 end
 
 % POSTPROCESSING
-% plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
-% plotSourceStrengthDistribution(coord_xC,coord_xP,Ncj,gamma,N);
-% plotVelocityDistribution(Qinf,V,N);
-% plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,N)
+plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
+plotSourceStrengthDistribution(coord_xC,coord_xP,Ncj,gamma,N+M);
+plotVelocityDistribution(Qinf,V(1:512,:),N); % Main airfoil Velocity distribution
+plotVelocityDistribution(Qinf,V(512+1:end,:),M); % Flap airfoil Velocity distribution
+plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,M+N);
 
 
