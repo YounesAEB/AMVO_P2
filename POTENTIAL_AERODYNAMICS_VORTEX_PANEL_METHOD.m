@@ -12,7 +12,6 @@ set(groot,'defaultLegendInterpreter','latex');
 %% EXERCISE I
 % Input parameters
 N       = 512;  % Number of panels
-
 NACA    = "0010";
 % R     = 1;    % Radius of the cilinder
 c       = 1;  % Airfoil chord
