@@ -10,26 +10,33 @@ clc; clear; close all;
 % Input parameters
 N       = 512;  % Number of panels
 NACA    = "0010";
-% R       = 1;    % Radius of the cilinder
+% R     = 1;    % Radius of the cilinder
 c       = 1;  % Airfoil chord
-AoA     = 0;  % Angle of attack
+AoAaux     = [2,4,6,8];  % Angle of attack in degrees
 Uinf    = 1;   % Freestream Velocity field module
-Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 
 % Precomputations
 % [coord_xP]      = setCylinderNodes(R,N); % Normally the coordinates xP are given
 [coord_xP,coord_xC,lp] = setGeometricParameters(c,N,NACA);
 [cj,sj,Ncj,Tcj] = computePanelAngleAndNormalAndTangentVectors(coord_xP,lp,N); % Panel angle, normal and tangent vectors calculation
 
-% POTENTIAL AERODYNAMICS - VELOCITY AND PRESSURE FIELDS CALCULATION
-% [gamma,uInd,wInd] = computeConstantSourceDistribution(Qinf,coord_xP,coord_xC,lp,cj,sj,Ncj,N);
-[gamma,uInd,wInd] = computeConstantVortexDistribution(Qinf,coord_xP,coord_xC,lp,cj,sj,Tcj,N);
+for Ncase=1:numel(AoAaux)
+    AoA = AoAaux(Ncase);
+    Qinf = Uinf*[cosd(AoA);sind(AoA)];
 
-% Preprocessing computations
-V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
-cp  = computeCp(Qinf,V);
-cl = computeCl(cp,lp,Ncj,c,AoA);
-cm4 = computeCm4(cp,coord_xC,coord_xP,c);
+    % POTENTIAL AERODYNAMICS - VELOCITY AND PRESSURE FIELDS CALCULATION
+    % [gamma,uInd,wInd] = computeConstantSourceDistribution(Qinf,coord_xP,coord_xC,lp,cj,sj,Ncj,N);
+    [gamma,uInd,wInd] = computeConstantVortexDistribution(Qinf,coord_xP,coord_xC,lp,cj,sj,Tcj,N);
+    
+    % Preprocessing computations
+    V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
+    cp  = computeCp(Qinf,V);
+    cl = computeCl(cp,lp,Ncj,c,AoA);
+    cm4 = computeCm4(cp,coord_xC,coord_xP,c);
+
+    msg = sprintf('Cl=%i and Cm1/4=%i for AoA=%i degrees', cl, cm4, AoA);
+    disp(msg);
+end
 % POSTPROCESSING
 plotPanelsAndNormVectors(coord_xP,coord_xC,Ncj); % Panel and norm vector visualization 
 plotSourceStrengthDistribution(coord_xC,coord_xP,Ncj,gamma,N);
