@@ -5,9 +5,6 @@
 %  /  MUEA - MQ1 - Younes Akhazzan - Joel Rajo - Pol Ruiz                         
 %--------------------------------------------------------------------------
 clc; clear; close all;
-set(groot,'defaultAxesTickLabelInterpreter','latex');  
-set(groot,'defaulttextinterpreter','latex');
-set(groot,'defaultLegendInterpreter','latex');
 
 %% EXERCISE I
 % Input parameters
@@ -15,17 +12,12 @@ N       = 512;  % Number of panels
 NACA    = "0010";
 % R       = 1;    % Radius of the cilinder
 c       = 1;  % Airfoil chord
-AoA     = 2;  % Angle of attack
+AoA     = 0;  % Angle of attack
 Uinf    = 1;   % Freestream Velocity field module
 Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 
 % Precomputations
-
-% Cilinder
 % [coord_xP]      = setCylinderNodes(R,N); % Normally the coordinates xP are given
-% [coord_xC,lp]   = setGeometricParameters(coord_xP,N);
-
-% Airfoil
 [coord_xP,coord_xC,lp] = setGeometricParameters(c,N,NACA);
 [cj,sj,Ncj,Tcj] = computePanelAngleAndNormalAndTangentVectors(coord_xP,lp,N); % Panel angle, normal and tangent vectors calculation
 
