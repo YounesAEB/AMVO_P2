@@ -14,7 +14,7 @@ set(groot,'defaultLegendInterpreter','latex');
 NACA    = "0010";
 c       = 1;  % Airfoil chord
 Uinf    = 1;   % Freestream Velocity field module
-Naux       = [16,32,64,128,256,512];  % Number of panels
+Naux       = [512];  % Number of panels
 AoAaux     = [0,2,4,6,8,10];  % Angle of attack in degrees
 
 % Vector definition
@@ -36,8 +36,8 @@ msg = sprintf('Calculation for %i panels...', N);
 
 % Vector definition
 CP = zeros(N,size(AoAaux,2));
-figure
-hold on
+% figure
+% hold on
 for j=1:numel(AoAaux)
     AoA = AoAaux(j);
     Qinf = Uinf*[cosd(AoA);sind(AoA)];
@@ -63,22 +63,43 @@ for j=1:numel(AoAaux)
     Mcrit2 = solve(eqn_Cp, Minf2);
     Mcrit = double(sqrt(Mcrit2(1)));
     MCR(i,j) = Mcrit;
+    % Graphical method
+    auxCP = Cp_0/(sqrt(1-Mcrit^2)+(Cp_0*Mcrit^2)/(2*sqrt(1-Mcrit^2))*(1+Mcrit^2*(isentropicExp-1)/2));
+    vecM = linspace(0,1,100);
+    figure
+    hold on
+    title("Determination of critical Mach number $M_{cr}$ for $\alpha$= " + string(AoA) + "$^\circ$");
+    hold on
+    plot(vecM,Cp_0./(sqrt(1-vecM.^2)+(Cp_0.*vecM.^2)./(2.*sqrt(1-vecM.^2)).*(1+vecM.^2.*(isentropicExp-1)./2)));
+    plot(vecM,2./(isentropicExp.*vecM.^2).*(((2+(isentropicExp-1).*vecM.^2)./(1+isentropicExp)).^(isentropicExp./(isentropicExp-1))-1));
+    xlabel("Freestream Mach number $M_{\infty}$");
+    ylabel("Pressure Coefficient $C_{p}$");
+    legend("Laitone's Rule","$C_p^*$=f($M_{cr}$)");
+    grid on;
+    grid minor;
+    box on;
+    axis padded
+    fontsize(13,"points");
+    xlim([Mcrit-0.2,Mcrit+0.15]);
+    ylim([auxCP-2,auxCP+2]);
+    hold off;
+
 
     msg = sprintf('Cl=%i and Cm1/4=%i for AoA=%i degrees', cl, cm4, AoA);
     disp(msg);
 
-plot(coord_xC(:,1),cp);
+% plot(coord_xC(:,1),cp);
 end
-title("Pressure coefficient plot for " + string(N) + " panels - $C_p~vs~x/c$")
-xlabel("Chord length $x/c$ ");
-ylabel("Pressure Coefficient $C_{p}$");
-legend("$\alpha=0$","$\alpha=2$","$\alpha=4$","$\alpha=6$","$\alpha=8$","$\alpha=10$","Location","southeast");
-grid on;
-grid minor;
-box on;
-axis padded
-fontsize(13,"points")
-hold off;
+% title("Pressure coefficient plot for " + string(N) + " panels - $C_p~vs~x/c$")
+% xlabel("Chord length $x/c$ ");
+% ylabel("Pressure Coefficient $C_{p}$");
+% legend("$\alpha=0$","$\alpha=2$","$\alpha=4$","$\alpha=6$","$\alpha=8$","$\alpha=10$","Location","southeast");
+% grid on;
+% grid minor;
+% box on;
+% axis padded
+% fontsize(13,"points")
+% hold off;
 
 
 % POSTPROCESSING
@@ -88,62 +109,62 @@ hold off;
 % plotPressureCoefficient(coord_xP,coord_xC,Ncj,CP(:,a),N)
 end
 
-% MESH INDEPENDENCE TEST - PLOTS
-figure
-hold on
-title("Panel density independence test - $C_l~vs~\alpha$")
-plot(AoAaux,CL(1,:));
-plot(AoAaux,CL(2,:));
-plot(AoAaux,CL(3,:));
-plot(AoAaux,CL(4,:));
-plot(AoAaux,CL(5,:));
-plot(AoAaux,CL(6,:));
-xlabel("Angle of attack $\alpha$ ($^\circ$)");
-ylabel("Lift Coefficient $C_{l}$");
-legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","northwest");
-grid on;
-grid minor;
-box on;
-axis padded
-fontsize(13,"points")
-hold off;
-
-figure
-hold on
-title("Panel density independence test - ${C_m}_{1/4}~vs~\alpha$")
-plot(AoAaux,CM4(1,:));
-plot(AoAaux,CM4(2,:));
-plot(AoAaux,CM4(3,:));
-plot(AoAaux,CM4(4,:));
-plot(AoAaux,CM4(5,:));
-plot(AoAaux,CM4(6,:));
-xlabel("Angle of attack $\alpha$ ($^\circ$)");
-ylabel("Momentum Coefficient about the quarter ${C_{m}}_{1/4}$");
-legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","southwest");
-grid on;
-grid minor;
-box on;
-axis padded
-fontsize(13,"points")
-hold off;
-
-figure
-hold on
-title("Panel density independence test - $M_{crit}~vs~\alpha$")
-plot(AoAaux,MCR(1,:));
-plot(AoAaux,MCR(2,:));
-plot(AoAaux,MCR(3,:));
-plot(AoAaux,MCR(4,:));
-plot(AoAaux,MCR(5,:));
-plot(AoAaux,MCR(6,:));
-xlabel("Angle of attack $\alpha$ ($^\circ$)");
-ylabel("Critical Freestream Mach number $M_{crit}$");
-legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","southwest");
-grid on;
-grid minor;
-box on;
-axis padded
-fontsize(13,"points")
-hold off;
+% % MESH INDEPENDENCE TEST - PLOTS
+% figure
+% hold on
+% title("Panel density independence test - $C_l~vs~\alpha$")
+% plot(AoAaux,CL(1,:));
+% plot(AoAaux,CL(2,:));
+% plot(AoAaux,CL(3,:));
+% plot(AoAaux,CL(4,:));
+% plot(AoAaux,CL(5,:));
+% plot(AoAaux,CL(6,:));
+% xlabel("Angle of attack $\alpha$ ($^\circ$)");
+% ylabel("Lift Coefficient $C_{l}$");
+% legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","northwest");
+% grid on;
+% grid minor;
+% box on;
+% axis padded
+% fontsize(13,"points")
+% hold off;
+% 
+% figure
+% hold on
+% title("Panel density independence test - ${C_m}_{1/4}~vs~\alpha$")
+% plot(AoAaux,CM4(1,:));
+% plot(AoAaux,CM4(2,:));
+% plot(AoAaux,CM4(3,:));
+% plot(AoAaux,CM4(4,:));
+% plot(AoAaux,CM4(5,:));
+% plot(AoAaux,CM4(6,:));
+% xlabel("Angle of attack $\alpha$ ($^\circ$)");
+% ylabel("Momentum Coefficient about the quarter ${C_{m}}_{1/4}$");
+% legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","southwest");
+% grid on;
+% grid minor;
+% box on;
+% axis padded
+% fontsize(13,"points")
+% hold off;
+% 
+% figure
+% hold on
+% title("Panel density independence test - $M_{crit}~vs~\alpha$")
+% plot(AoAaux,MCR(1,:));
+% plot(AoAaux,MCR(2,:));
+% plot(AoAaux,MCR(3,:));
+% plot(AoAaux,MCR(4,:));
+% plot(AoAaux,MCR(5,:));
+% plot(AoAaux,MCR(6,:));
+% xlabel("Angle of attack $\alpha$ ($^\circ$)");
+% ylabel("Critical Freestream Mach number $M_{crit}$");
+% legend("$N_{elem}=16$","$N_{elem}=32$","$N_{elem}=64$","$N_{elem}=128$","$N_{elem}=256$","$N_{elem}=512$","Location","southwest");
+% grid on;
+% grid minor;
+% box on;
+% axis padded
+% fontsize(13,"points")
+% hold off;
 
 
