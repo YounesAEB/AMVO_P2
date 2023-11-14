@@ -19,15 +19,12 @@ function plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,N)
     figure
     plot(angle,cp);
     xlim([0,360]);
-    title('$c_p$ angle distribution')
-    xlabel('$\theta$ ($^o$)')
-    ylabel('$c_p$')
-    grid on
-    grid minor
-    axis padded
+    title("Pressure coefficent distribution over a NACA 0010 at $\alpha=10^\circ$")
 
     % Pressure Coefficient airfoil distribution plot
     figure
+    hold on
+    title("Pressure coefficent distribution over a NACA 0010 at $\alpha=10^\circ$")
     for i = 1:N
         Cp_norm = cp.*Ncj;
         if cp(i) < 0
@@ -39,12 +36,14 @@ function plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,N)
         end
     end
     plot(coord_xP(:,1),coord_xP(:,2),'k');
-    axis equal
-    hold off
-    title('$c_p$ distribution')
-    xlabel('$x$ (m)')
-    ylabel('$z$ (m)')
-    grid on
-    grid minor
-    axis padded
+    xlabel("x/c");
+ylabel("z/c");
+legend("Negative $C_p$","Positive $C_p$","Location","northeast");
+grid on;
+grid minor;
+box on;
+axis padded
+axis equal
+fontsize(13,"points")
+hold off;
 end

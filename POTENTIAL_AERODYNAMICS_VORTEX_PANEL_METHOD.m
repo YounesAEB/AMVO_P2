@@ -15,7 +15,7 @@ NACA    = "0010";
 c       = 1;  % Airfoil chord
 Uinf    = 1;   % Freestream Velocity field module
 Naux       = [16,32,64,128,256,512];  % Number of panels
-AoAaux     = [2,4,6,8,10];  % Angle of attack in degrees
+AoAaux     = [0,2,4,6,8,10];  % Angle of attack in degrees
 
 % Vector definition
 CL = zeros(size(Naux,2),size(AoAaux,2));
@@ -72,7 +72,7 @@ end
 title("Pressure coefficient plot for " + string(N) + " panels - $C_p~vs~x/c$")
 xlabel("Chord length $x/c$ ");
 ylabel("Pressure Coefficient $C_{p}$");
-legend("$\alpha=2$","$\alpha=4$","$\alpha=6$","$\alpha=8$","$\alpha=10$","Location","southeast");
+legend("$\alpha=0$","$\alpha=2$","$\alpha=4$","$\alpha=6$","$\alpha=8$","$\alpha=10$","Location","southeast");
 grid on;
 grid minor;
 box on;
@@ -145,6 +145,5 @@ box on;
 axis padded
 fontsize(13,"points")
 hold off;
-
 
 
