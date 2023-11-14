@@ -64,20 +64,3 @@ axis padded
 hold off;
 
 cpast = -0.7708; % Imposed Minimum Cp* to find Critical Mach number
-MCR = linspace(0,1,100);
-figure
-title("Determination of critical Mach number $M_{cr}$")
-hold on
-plot(MCR,cpast./(sqrt(1-MCR.^2)+(cpast.*MCR.^2)./(2.*sqrt(1-MCR.^2)).*(1+MCR.^2.*(isentropicExp-1)./2)));
-plot(MCR,2./(isentropicExp.*MCR.^2).*(((2+(isentropicExp-1).*MCR.^2)./(1+isentropicExp)).^(isentropicExp./(isentropicExp-1))-1))
-xlabel("Freestream Mach number $M_{\infty}$");
-ylabel("Pressure Coefficient $C_{l}$");
-legend("Laitone's Rule","$C_p^*$=f($M_{cr}$)")
-grid on;
-grid minor;
-box on;
-axis padded
-fontsize(13,"points")
-xlim([0.5,0.7]);
-ylim([-2,-1.0]);
-hold off;
