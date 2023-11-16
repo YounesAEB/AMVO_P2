@@ -18,7 +18,8 @@ Naux       = [512];  % Number of panels
 AoAaux     = [0,2,4,6,8,10];  % Angle of attack in degrees
 
 % Vector definition
-CL = zeros(size(Naux,2),size(AoAaux,2));
+CL_int = zeros(size(Naux,2),size(AoAaux,2));
+CL_kutta = zeros(size(Naux,2),size(AoAaux,2));
 CM4 = zeros(size(Naux,2),size(AoAaux,2));
 MCR = zeros(size(Naux,2),size(AoAaux,2));
 
@@ -48,10 +49,11 @@ for j=1:numel(AoAaux)
     
     % Preprocessing computations
     V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
-    cp  = computeCp(Qinf,V);
+    cp = computeCp(Qinf,V,gamma);
     CP(:,j) = cp;
-    cl = computeCl(cp,lp,Ncj,c,AoA);
-    CL(i,j) = cl;
+    [cl_int,cl_kutta] = computeCl(cp,lp,Ncj,c,AoA,Qinf,gamma);
+    CL_int(i,j) = cl_int;
+    CL_kutta(i,j) = cl_kutta;
     cm4 = computeCm4(cp,coord_xC,coord_xP,c);
     CM4(i,j) = cm4; 
 
@@ -85,7 +87,7 @@ for j=1:numel(AoAaux)
     hold off;
 
 
-    msg = sprintf('Cl=%i and Cm1/4=%i for AoA=%i degrees', cl, cm4, AoA);
+    msg = sprintf('Cl=%i for the integral, Cl=%i for kutta and Cm1/4=%i for AoA=%i degrees', cl_int, cl_kutta, cm4, AoA);
     disp(msg);
 
 % plot(coord_xC(:,1),cp);
