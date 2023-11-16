@@ -44,7 +44,7 @@ Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 
 % Preprocessing computations
 V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
-cp  = computeCp(Qinf,V);
+cp = computeCp(Qinf,V,gamma);
 cpCorrected = cp./(sqrt(1-M(1,i)^2)+(cp.*M(1,i)^2)/(2*sqrt(1-M(1,i)^2))*(1+M(1,i)^2*(isentropicExp-1)/2));
 cl = computeCl(cpCorrected,lp,Ncj,c,AoA);
 clCorrected(i) = cl;

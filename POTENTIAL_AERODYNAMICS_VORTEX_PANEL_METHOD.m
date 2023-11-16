@@ -49,7 +49,7 @@ for j=1:numel(AoAaux)
     
     % Preprocessing computations
     V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
-    cp  = computeCp(Qinf,V);
+    cp = computeCp(Qinf,V,gamma);
     CP(:,j) = cp;
     [cl_int,cl_kutta] = computeCl(cp,lp,Ncj,c,AoA,Qinf,gamma);
     CL_int(i,j) = cl_int;

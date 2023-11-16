@@ -11,8 +11,8 @@ set(groot,'defaultLegendInterpreter','latex');
 
 %% COMPOUND WING
 % Input parameters
-N       = 512;  % Number of panels main airfoil
-M       = 512;   % Number of panels flap airfoil
+N       = 16;  % Number of panels main airfoil
+M       = 16;   % Number of panels flap airfoil
 NACA    = "0015";
 c1      = 1;  % Main airfoil chord
 c2      = 0.45;  % Flap airfoil chord
@@ -49,7 +49,7 @@ Tcj = [TcjN;TcjM];
 
 % Preprocessing computations
 V   = computeVelocity(Qinf,gamma,uInd,wInd,N+M);
-cp  = computeCp(Qinf,V);
+cp = computeCp(Qinf,V,gamma);
 [cl1_int,cl1_kutta] = computeCl(cp(1:N,:),lp(1:N,:),Ncj(1:N,:),c,AoA,Qinf,gamma(1:N,:));
 [cl2_int,cl2_kutta] = computeCl(cp(N+1:N+M,:),lp(N+1:N+M,:),Ncj(N+1:N+M,:),c,AoA,Qinf,gamma(N+1:N+M,:));
 cl_int = cl1_int + cl2_int;
