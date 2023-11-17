@@ -18,14 +18,13 @@ AoA           = 2;    % Angle of attack
 isentropicExp = 1.4; % Gamma ideal gas
 Mcrit         = 0.604052986849087;
 a             = 340;  % [m/s] Sound velocity
-M             = [Mcrit-0.15,Mcrit-0.1,Mcrit-0.05,Mcrit];
+M             = (Mcrit-0.15):0.01:Mcrit;
 
 % Vector definition
 clCorrected   = zeros(size(M,2),1);
 
 for i=1:size(M,2)
 Uinf    = M(1,i)*a;   % Freestream Velocity field module
-B       = sqrt(1-M(1,i)^2); %Prandlt-Glauert Correction Parameter
 Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 
 % Precomputations
@@ -46,15 +45,17 @@ Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
 V   = computeVelocity(Qinf,gamma,uInd,wInd,N);
 cp = computeCp(Qinf,V,gamma);
 cpCorrected = cp./(sqrt(1-M(1,i)^2)+(cp.*M(1,i)^2)/(2*sqrt(1-M(1,i)^2))*(1+M(1,i)^2*(isentropicExp-1)/2));
-cl = computeCl(cpCorrected,lp,Ncj,c,AoA);
-clCorrected(i) = cl;
+[cl_int,cl_kutta] = computeCl(cpCorrected,lp,Ncj,c,AoA,Qinf,gamma);
+clCorrected(i) = cl_int;
 
 end
 
+load RequestedDataFor3.mat;
 figure
 hold on
+title("$C_l$ vs $M_\infty$")
 plot(M,clCorrected,'b');
-scatter(M,clCorrected,"square","filled","r");
+scatter(RequestedDataFor3.M,RequestedDataFor3.clCorrected,"square","filled","r");
 xlabel("Freestream Mach number $M_{\infty}$");
 ylabel("Lift Coefficient $C_{l}$");
 grid on;
