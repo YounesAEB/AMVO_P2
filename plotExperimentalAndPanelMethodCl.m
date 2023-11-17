@@ -15,14 +15,14 @@ function plotExperimentalAndPanelMethodCl(AoAaux,CL_kutta)
 
     figure
     hold on
-    title("DVM vs experimental data")
+    title("DVM vs XFOIL data")
     scatter(AoAaux,CL_kutta)
     %plot(AoAExp_Re100k,ClExp_Re100k);
     plot(AoAExp_Re500k,ClExp_Re500k);
     plot(AoAExp_Re1M,ClExp_Re1M);
     xlabel("Angle of attack $\alpha$ ($^\circ$)");
     ylabel("Lift Coefficient $C_{l}$");
-    legend("DVM","Experimental $Re=5\cdot 10^5$", "Experimental $Re=1\cdot 10^6$","Location","southeast");
+    legend("DVM","XFOIL $Re=5\cdot 10^5$", "XFOIL $Re=1\cdot 10^6$","Location","southeast");
     grid on;
     grid minor;
     box on;
