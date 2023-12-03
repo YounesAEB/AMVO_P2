@@ -18,23 +18,20 @@ c1      = 1;  % Main airfoil chord
 c2      = 0.45;  % Flap airfoil chord
 d       = 0.05; % Gap
 c       = c1 + c2 + d; % Total chord
-AoA     = 0;  % Angle of attack main airfoil
+AoAaux = 0:0.5:6;  % Angle of attack main airfoil
 Uinf    = 1;   % Freestream Velocity field module
+
+df      = 0;  % Flap deflection
+CM4 = zeros(size(AoAaux,2),1);
+CL_int  = zeros(size(AoAaux,2),1);
+CL1_int  = zeros(size(AoAaux,2),1);
+CL2_int  = zeros(size(AoAaux,2),1);
+CL_kutta  = zeros(size(AoAaux,2),1);
+CL1_kutta  = zeros(size(AoAaux,2),1);
+CL2_kutta  = zeros(size(AoAaux,2),1);
+for i=1:size(AoAaux,2)
+AoA = AoAaux(i);
 Qinf    = Uinf*[cosd(AoA);sind(AoA)]; % Freestream Velocity field
-
-df_aux      = 0:1:20;  % Flap deflection
-% df_aux      = [4];  % Flap deflection
-CM4 = zeros(size(df_aux,2),1);
-CL_int  = zeros(size(df_aux,2),1);
-CL1_int  = zeros(size(df_aux,2),1);
-CL2_int  = zeros(size(df_aux,2),1);
-CL_kutta  = zeros(size(df_aux,2),1);
-CL1_kutta  = zeros(size(df_aux,2),1);
-CL2_kutta  = zeros(size(df_aux,2),1);
-for i=1:size(df_aux,2)
-
-df = df_aux(i);
-
 % Precomputations
 [coord_xP,coord_xC,lp] = setFlapGeometry(c1,c2,d,df,N,M,NACA);
 [cjN,sjN,NcjN,TcjN] = computePanelAngleAndNormalAndTangentVectors(coord_xP(1:N+1,:),lp(1:N,:),N); % Main panel angle, normal and tangent vectors calculation
@@ -73,9 +70,10 @@ end
 % plotVelocityDistribution(Qinf,V(512+1:end,:),M); % Flap airfoil Velocity distribution
 % plotPressureCoefficient(coord_xP,coord_xC,Ncj,cp,M+N);
 
+% POST-PROCESS FOR PART 2
 %% POST-PROCESS FOR PART 2
 
-x  = df_aux(:); %reshape the data into a column vector
+x  = AoAaux(:); %reshape the data into a column vector
 y  = CL_int(:);
 x0 = 0;         %point to go through
 y0 = 0;
@@ -111,7 +109,8 @@ yhat = polyval( p, x );
 plot(x,y,'.b-')
 hold on
 % Plot point to go through
-plot(x0,y0,'gx','linewidth',2)
+plot(x0,y0,'gx','linewidth',4)
 % Plot fitted data
-plot(x,yhat,'r','linewidth',1)
+plot(x,yhat,'r','linewidth',2)
 hold off
+

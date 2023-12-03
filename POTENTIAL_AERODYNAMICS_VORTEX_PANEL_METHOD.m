@@ -17,7 +17,7 @@ Uinf    = 1;   % Freestream Velocity field module
 
 % DO NOT FORGET TO CHANGE THE FOLLOWING INPUTS DEPENDING ON THE REQUIRED PLOT
 Naux    = [512]; % Number of panels
-AoAaux  = -10:2:10;  % Angle of attack in degrees
+AoAaux  = 0:0.5:6;  % Angle of attack in degrees
 
 % Vector definition
 CL_int = zeros(size(Naux,2),size(AoAaux,2));
@@ -89,3 +89,45 @@ plotExperimentalAndPanelMethodCl(AoAaux,CL_kutta);
 %         'PaperSize',[pos(3), pos(4)]);
 %     print(gcf, 'Name', '-dpdf', '-r0'); % incrementar '-r0' resolución 
 
+%% POST-PROCESS FOR PART 2
+
+x  = AoAaux(:); %reshape the data into a column vector
+y  = CL_int(:);
+x0 = 0;         %point to go through
+y0 = 0;
+
+
+% 'C' is the Vandermonde matrix for 'x'
+n = 1; % Degree of polynomial to fit
+Van(:,n+1) = ones(length(x),1,class(x));
+for j = n:-1:1
+    Van(:,j) = x.*Van(:,j+1);
+end
+C = Van;
+
+% 'd' is the vector of target values, 'y'.
+d = y;
+
+% There are no inequality constraints in this case, i.e.,
+A = [];
+b = [];
+
+% We use linear equality constraints to force the curve to hit the required point. In
+% this case, 'Aeq' is the Vandermoonde matrix for 'x0'
+Aeq = x0.^(n:-1:0);
+% and 'beq' is the value the curve should take at that point
+beq = y0;
+
+p = lsqlin( C, d, A, b, Aeq, beq );
+
+% We can then use POLYVAL to evaluate the fitted curve
+yhat = polyval( p, x );
+
+% Plot original data
+plot(x,y,'.b-')
+hold on
+% Plot point to go through
+plot(x0,y0,'gx','linewidth',4)
+% Plot fitted data
+plot(x,yhat,'r','linewidth',2)
+hold off
