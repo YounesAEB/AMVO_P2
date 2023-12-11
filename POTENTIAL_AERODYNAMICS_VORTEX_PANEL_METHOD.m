@@ -123,11 +123,29 @@ p = lsqlin( C, d, A, b, Aeq, beq );
 % We can then use POLYVAL to evaluate the fitted curve
 yhat = polyval( p, x );
 
-% Plot original data
-plot(x,y,'.b-')
+figure
 hold on
-% Plot point to go through
-plot(x0,y0,'gx','linewidth',4)
+title("Regression of the lift coefficient","as a function of $\alpha$")
+% Plot original data
+plot(x,y,'.b-','linewidth',1.2)
 % Plot fitted data
-plot(x,yhat,'r','linewidth',2)
+plot(x,yhat,'r','linewidth',1)
+% Plot point to go through
+plot(x0,y0,'gx','linewidth',1)
+
+xlabel("Angle of attack $\alpha$ $(^\circ)$");
+ylabel("Lift coefficient $C_{l}$");
+legend("CSV","Regression","Location","best");
+grid on;
+grid minor;
+box on;
+axis padded
+set(gca, 'TickLabelInterpreter', 'latex', 'FontSize',13);
 hold off
+
+% CODE TO PRINT THE FIGURES IN PDF FORMAT
+    set(gcf, 'Units', 'Centimeters');
+    pos = get(gcf, 'Position');
+    set(gcf, 'PaperPositionMode', 'Auto', 'PaperUnits', 'Centimeters', ...
+        'PaperSize',[pos(3), pos(4)]);
+    print(gcf, 'CL_0010', '-dpdf', '-r0'); % incrementar '-r0' resolución
